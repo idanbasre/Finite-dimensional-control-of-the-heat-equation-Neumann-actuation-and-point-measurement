@@ -1,4 +1,4 @@
-function [A0, B0, B_ns, C0, C_ns] = getSystem(N0, q)
+function [A0, A0_hat, B0, B_ns, B0_tilda, C0, C_ns] = getSystem(N0, q)
     phi_n = @(x,n) sqrt(2)*cos(pi*(n-1)*x);
     N = 30;
     
@@ -14,6 +14,13 @@ function [A0, B0, B_ns, C0, C_ns] = getSystem(N0, q)
     B0 = B_ns(1:N0);
     
     assert(all(B_ns));
+    
+    %A0_hat
+    A0_hat = [ 0, zeros(1, N0);
+               q*B0,   A0     ];
+    
+    % B0_tilda
+    B0_tilda = [1; -B0];
 
     %C0  
     C_n = @(n) phi_n(0,n);

@@ -27,7 +27,7 @@ delta_K0 = 10;
 % ------------------
 
 % Calculating System
-[A0, B0, B_ns, C0, C_ns] = getSystem(N0, q);
+[A0, A0_hat, B0, B_ns, B0_tilda, C0, C_ns] = getSystem(N0, q);
 
 % Calculating Gains
 [K0, L0] = calcGains(N0, A0, B0, C0, delta_L0, delta_K0);
