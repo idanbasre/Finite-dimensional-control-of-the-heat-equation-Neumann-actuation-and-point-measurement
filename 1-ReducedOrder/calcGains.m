@@ -1,9 +1,9 @@
-function [K0, L0] = calcGains(N0, A0, B0, C0, delta_L0, delta_K0)
+function [K0, L0] = calcGains(N0, A0, A0_hat, B0_tilda, C0, delta_L0, delta_K0)
 
     % L0
     setlmis([]);
-    P = lmivar(1, [N0+1,1]);
-    Y = lmivar(2, [N0+1,1]); % Y = P*L0
+    P = lmivar(1, [N0,1]);
+    Y = lmivar(2, [N0,1]); % Y = P*L0
 
     lmiterm([1 1 1 P], A0', 1, 's');
     lmiterm([1 1 1 Y], 1, -C0, 's');
@@ -26,8 +26,8 @@ function [K0, L0] = calcGains(N0, A0, B0, C0, delta_L0, delta_K0)
     Pinv = lmivar(1, [N0+1,1]);
     Q = lmivar(2, [1, N0+1]); % Q = K0*inv(P)
 
-    lmiterm([1 1 1 Pinv], A0, 1, 's');
-    lmiterm([1 1 1 Q], B0, 1, 's');
+    lmiterm([1 1 1 Pinv], A0_hat, 1, 's');
+    lmiterm([1 1 1 Q], B0_tilda, 1, 's');
     lmiterm([1 1 1 Pinv], 2*delta_K0, 1); 
 
     lmiterm([-2 1 1 Pinv], 1, 1);
@@ -43,5 +43,5 @@ function [K0, L0] = calcGains(N0, A0, B0, C0, delta_L0, delta_K0)
     K0 = Q_opt/Pinv_opt;
 
     % Tests K0
-    assert(max(eig(A0+B0*K0)) < 0);
+    assert(max(eig(A0+B0_tilda*K0)) < 0);
 end
